@@ -103,7 +103,7 @@ public class FilmListResource {
 		}
 		final List<Map<String, Object>> li = YoukuHKFreeFilmDao.getBy(String.format(" page_num = %s and (inactive != 1 or inactive is null)",pageNum), " order by id asc , weight desc ",  sqliteFilePath,"/movie/play/yk/tw/%s",  "/movie/coverimg/yk/tw/%s");
 		
-		final byte[] bs = ListFilm.render(li,"香港电影", pageNum, maxPageNum/*这个是要改的，要看对方的资源是否是变化 了*/, "/movie/list/yk/tw/%s");
+		final byte[] bs = ListFilm.render(li,"台湾电影", pageNum, maxPageNum/*这个是要改的，要看对方的资源是否是变化 了*/, "/movie/list/yk/tw/%s");
 		return Response.ok(bs).build();
 	}
 	
