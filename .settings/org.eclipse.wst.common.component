@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="filmview">
+        <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <dependent-module archiveName="sqlitetools-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/sqlitetools/sqlitetools">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="classpathgen-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/classpathgen/classpathgen">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="globalsetting-1.1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/globalsetting/globalsetting">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="mytools-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/mytools/mytools">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="java-output-path" value="/filmview/target/classes"/>
+        <property name="context-root" value="filmview"/>
+    </wb-module>
+</project-modules>
