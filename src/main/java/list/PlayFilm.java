@@ -15,7 +15,7 @@ import freemarker.template.TemplateExceptionHandler;
 public class PlayFilm {
 
 	
-	public static byte[] render(final Map<String, Object> movie ) throws Exception{
+	public static byte[] render(final Map<String, Object> movie , final String type, final String uuid) throws Exception{
 		final Configuration cfg = new Configuration(Configuration.VERSION_2_3_22);
 		cfg.setDirectoryForTemplateLoading(new File(GlobalSetting.getStringByPath("freemarker_dir")));
 		cfg.setDefaultEncoding("UTF-8");
@@ -28,6 +28,8 @@ public class PlayFilm {
 		
 		final Map<String, Object> root = Maps.newHashMap();
 		root.put("movie", movie);
+		root.put("type", type);
+		root.put("uuid", uuid);
 		
 //		root.put("pages", pages(pageNum, maxPage/*这个是要改的，要看对方的资源是否是变化 了*/, pagingUrlFormatter));
 //		root.put("nextPage", pageNum < maxPage ? String.format(pagingUrlFormatter, pageNum+1): String.format(pagingUrlFormatter, pageNum));

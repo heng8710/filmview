@@ -1,8 +1,6 @@
 package resource;
 
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.net.URLEncoder;
+import java.io.File;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.util.List;
@@ -31,10 +29,9 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.SimpleFSDirectory;
 
 import sqlitetools.SqliteTools;
+import tools.SqliteHelper;
 import uuid.MovieUUIDHelper;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 
@@ -50,111 +47,41 @@ public class SearchResource {
 	static final int NumberPerPage = 30;
 	static final int MaxNumber = 1024*1024;
 	
+//	final static String[] searchTypes = new String[]{"hk", "dalu", "tw"};
+	final static String[] searchTypes = new String[]{"hk", "dalu", "tw", "hanguo", "tai", "usa", "uk", "fr"}; 
+	
 	@GET
 	@Path("/{text}/{pageNum}")
 	@Produces("text/html")
 	public Response coverimg(@PathParam("text") final String text, @PathParam("pageNum") final int pageNum) throws Exception{
 		//TODO 限制text
-		
-//		final Connection hkConn = SqliteTools.conn(GlobalSetting.getStringByPath("yk_hk_sqlite_file"));
-//		String folder = GlobalSetting.getStringByPath("hkpinglun_luncene_index_folder");
-//		final Integer[] hkIds = doSearch(text, pageNum, folder);
-		
 		final List<Map<String, Object>> li = Lists.newArrayList();
 		int hits = 0;
-		hits = Math.max(hits, addSearch(li, "/movie/play/yk/hk/%s", "/movie/coverimg/yk/hk/%s", GlobalSetting.getStringByPath("yk_hk_sqlite_file"), GlobalSetting.getStringByPath("hkpinglun_luncene_index_folder"), text, pageNum));
-		
-//		for(int index=1; index< hkIds.length; index++){
-//			final int id = hkIds[index];
-//			final Map<String, String> row = SqliteTools.getOne_2(hkConn, "movie", String.format("id = %s and (inactive != 1 or inactive is null)", id), null, null);
-//			if(row == null || row.size() == 0){
-//				continue;
-//			}
-//			final Map<String, Object> i = Maps.newHashMap();
-//			final String movieId = row.get("id");
-//			final String url = String.format("/movie/play/yk/hk/%s", MovieUUIDHelper.uuid(Long.valueOf(movieId)));
-//			i.put("url", url);
-//			i.put("title", row.get("movie_name"));
-//			final String proxyImgUrl = String.format("/movie/coverimg/yk/hk/%s", MovieUUIDHelper.uuid(Long.valueOf(id)));
-//			i.put("img", proxyImgUrl);
-//			i.put("time", "");
-//			i.put("info", row.get("actors"));
-//			final Map<String, Object> features = new ObjectMapper().readValue(row.get("features"), Map.class);
-//			i.put("features", features);
-//			li.add(i);
-//			/////////////////////////
-//		}
-		
-		hits = Math.max(hits, addSearch(li, "/movie/play/yk/dalu/%s", "/movie/coverimg/yk/dalu/%s", GlobalSetting.getStringByPath("yk_dalu_sqlite_file"), GlobalSetting.getStringByPath("dalupinglun_luncene_index_folder"), text, pageNum));
-		
-//		final Connection daluConn = SqliteTools.conn(GlobalSetting.getStringByPath("yk_dalu_sqlite_file"));
-//		folder = GlobalSetting.getStringByPath("dalupinglun_luncene_index_folder");
-//		final Integer[] daluIds = doSearch(text, pageNum, folder);
-//		for(int index=1; index<daluIds.length; index++){
-//			final int id = daluIds[index];
-//			final Map<String, String> row = SqliteTools.getOne_2(daluConn, "movie", String.format("id = %s and (inactive != 1 or inactive is null)", id), null, null);
-//			if(row == null || row.size() == 0){
-//				continue;
-//			}
-//			final Map<String, Object> i = Maps.newHashMap();
-//			final String movieId = row.get("id");
-//			final String url = String.format("/movie/play/yk/dalu/%s", MovieUUIDHelper.uuid(Long.valueOf(movieId)));
-//			i.put("url", url);
-//			i.put("title", row.get("movie_name"));
-//			final String proxyImgUrl = String.format("/movie/coverimg/yk/dalu/%s", MovieUUIDHelper.uuid(Long.valueOf(id)));
-//			i.put("img", proxyImgUrl);
-//			i.put("time", "");
-//			i.put("info", row.get("actors"));
-//			final Map<String, Object> features = new ObjectMapper().readValue(row.get("features"), Map.class);
-//			i.put("features", features);
-//			li.add(i);
-//			////////////////////////////
-//		}
-		
-		
-		hits = Math.max(hits, addSearch(li, "/movie/play/yk/tw/%s", "/movie/coverimg/yk/tw/%s", GlobalSetting.getStringByPath("yk_tw_sqlite_file"), GlobalSetting.getStringByPath("twpinglun_luncene_index_folder"), text, pageNum));
-		
-//		final Connection twConn = SqliteTools.conn(GlobalSetting.getStringByPath("yk_tw_sqlite_file"));
-//		folder = GlobalSetting.getStringByPath("twpinglun_luncene_index_folder");
-//		final Integer[] twIds = doSearch(text, pageNum, folder);
-//		for(int index=1; index<twIds.length; index++){
-//			final int id = twIds[index];
-//			final Map<String, String> row = SqliteTools.getOne_2(twConn, "movie", String.format("id = %s and (inactive != 1 or inactive is null)", id), null, null);
-//			if(row == null || row.size() == 0){
-//				continue;
-//			}
-//			final Map<String, Object> i = Maps.newHashMap();
-//			final String movieId = row.get("id");
-//			final String url = String.format("/movie/play/yk/tw/%s", MovieUUIDHelper.uuid(Long.valueOf(movieId)));
-//			i.put("url", url);
-//			i.put("title", row.get("movie_name"));
-//			final String proxyImgUrl = String.format("/movie/coverimg/yk/tw/%s", MovieUUIDHelper.uuid(Long.valueOf(id)));
-//			i.put("img", proxyImgUrl);
-//			i.put("time", "");
-//			i.put("info", row.get("actors"));
-//			final Map<String, Object> features = new ObjectMapper().readValue(row.get("features"), Map.class);
-//			i.put("features", features);
-//			li.add(i);
-//		}
-//		final double page1 = Math.ceil(BigDecimal.valueOf(hkIds[0]).divide(BigDecimal.valueOf(NumberPerPage)).doubleValue());
-//		final double page2 = Math.ceil(BigDecimal.valueOf(daluIds[0]).divide(BigDecimal.valueOf(NumberPerPage)).doubleValue());
-		// (int)Math.ceil(Math.max(page1, page2))
-		
-		
+		for(final String type: searchTypes){
+			final String targetLuceneFolder = Paths.get(GlobalSetting.getStringByPath("lucene_index_root_folder_for_youku")).resolve(type).toFile().getAbsolutePath();
+			hits = Math.max(hits, addSearch(li, "/movie/play/yk/"+type+"/%s", "/movie/coverimg/yk/"+type+"/%s", SqliteHelper.getTargetSqliteFile("yk_sqlite_folder", type), targetLuceneFolder, text, pageNum));
+		}
+//		hits = Math.max(hits, addSearch(li, "/movie/play/yk/hk/%s", "/movie/coverimg/yk/hk/%s", GlobalSetting.getStringByPath("yk_hk_sqlite_file"), GlobalSetting.getStringByPath("hkpinglun_luncene_index_folder"), text, pageNum));
+//		hits = Math.max(hits, addSearch(li, "/movie/play/yk/dalu/%s", "/movie/coverimg/yk/dalu/%s", GlobalSetting.getStringByPath("yk_dalu_sqlite_file"), GlobalSetting.getStringByPath("dalupinglun_luncene_index_folder"), text, pageNum));
+//		hits = Math.max(hits, addSearch(li, "/movie/play/yk/tw/%s", "/movie/coverimg/yk/tw/%s", GlobalSetting.getStringByPath("yk_tw_sqlite_file"), GlobalSetting.getStringByPath("twpinglun_luncene_index_folder"), text, pageNum));
+//		hits = Math.max(hits, addSearch(li, "/movie/play/yk/hanguo/%s", "/movie/coverimg/yk/hanguo/%s", GlobalSetting.getStringByPath("yk_hanguo_sqlite_file"), GlobalSetting.getStringByPath("hanguopinglun_luncene_index_folder"), text, pageNum));
 		final byte[] bs = ListFilm.render(li, "搜索:"+ text, pageNum, (int)Math.ceil((double)hits/NumberPerPage) , "/movie/search/"+ text + "/%s"); 
 		return Response.ok(bs).build();
 	}
 	
+
 	static Integer addSearch(final List<Map<String, Object>> li, final String playUrlFormatter, final String coverimgUrlFormatter, final String sqliteFile, final String luceneFolder, final String searchText, final int pageNum) throws Exception{
-//		final String sqliteFile = GlobalSetting.getStringByPath("yk_tw_sqlite_file");
 		if(Strings.isNullOrEmpty(sqliteFile)){
 			return 0;
 		}
 		if(!Paths.get(sqliteFile).toFile().exists()){
 			return 0;
 		}
+		final File folder = Paths.get(luceneFolder).toFile();
+		if(!folder.exists() || !folder.isDirectory()){
+			return 0;
+		}
 		final Connection twConn = SqliteTools.conn(sqliteFile);
-//		folder = GlobalSetting.getStringByPath("twpinglun_luncene_index_folder");
 		final Integer[] twIds = doSearch(searchText, pageNum, luceneFolder);
 		for(int index=1; index<twIds.length; index++){
 			final int id = twIds[index];
@@ -191,7 +118,7 @@ public class SearchResource {
 			query = parser.parse(String.format("title:\"%s\" content:\"%s\"", searchText, searchText));
 		} catch (final ParseException e) {
 //			logger.log(Level.SEVERE,"解析查询语句有问题",  e);
-			throw new IllegalArgumentException("解析查询语句有问题");
+			throw new IllegalArgumentException("解析查询语句有问题", e);
 		}
 		
 		try (final Directory index = new SimpleFSDirectory(Paths.get(indexPath));){

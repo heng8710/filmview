@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -23,12 +24,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import sqlitetools.SqliteTools;
+import tools.SqliteHelper;
 import uuid.MovieUUIDHelper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
-
-import conf.GlobalSetting;
 
 
 @Path("/edit")
@@ -37,11 +37,11 @@ public class FilmEditResource {
 	@POST
 	@Path("youku_play_url")
 	@Produces("text/html")
-	public Response post(@PathParam("type") final String type, @PathParam("id") final String qid, @PathParam("youku_play_url") final String youkuPlayUrl) throws Exception{
+	public Response post(@FormParam("type") final String type, @FormParam("id") final String qid, @FormParam("youku_play_url") final String youkuPlayUrl) throws Exception{
 		//检查
-		final String sqliteFile = sqliteFile(type);
+		final String sqliteFile = SqliteHelper.getTargetSqliteFile("yk_sqlite_folder", type);
 		try(final Connection conn = SqliteTools.conn(sqliteFile)){
-			final Map<String, String> row = SqliteTools.getOne_2(conn, "movie", String.format(" id = %s and (inactive != 1 or inactive is null)",qid), null, null);
+			final Map<String, String> row = SqliteTools.getOne_2(conn, "movie", String.format(" id = %s",qid), null, null);
 			if(row == null || row.size() == 0){
 				return Response.status(404).entity(String.format("找不到id=[%s]的记录", qid)).build();
 			}
@@ -49,7 +49,7 @@ public class FilmEditResource {
 			if(moviePlayUrlMap != null && moviePlayUrlMap.size() > 0){
 				SqliteTools.update(conn, "movie", " id = "+ qid, new Object[]{new ObjectMapper().writeValueAsString(moviePlayUrlMap)}, new String[]{"features"});
 			}
-			return Response.seeOther(URI.create(String.format("/movie/edit/%s?id=%s", type, qid))).build();
+			return Response.seeOther(URI.create(String.format("/movie/edit/youku_play_url/%s?id=%s", type, qid))).build();
 		}catch (final Exception e) {
 			return Response.serverError().entity(e).build();
 		}
@@ -92,13 +92,13 @@ public class FilmEditResource {
 	@Produces("text/html")
 	public Response get(@PathParam("type") final String type, @QueryParam("id") final String qid, @QueryParam("uuid") final String quuid) throws Exception{
 		//检查
-		final String sqliteFile = sqliteFile(type);
+		final String sqliteFile = SqliteHelper.getTargetSqliteFile("yk_sqlite_folder", type);
 		final Long id = Strings.isNullOrEmpty(qid)? MovieUUIDHelper.id(quuid): Long.valueOf(qid);
 		if(id == null){
 			return Response.status(404).entity(String.format("uuid=[%s], id=[%s]，都不正确", quuid, qid)).build();
 		}
 		try(final Connection conn = SqliteTools.conn(sqliteFile)){
-			final Map<String, String> row = SqliteTools.getOne_2(conn, "movie", String.format(" id = %s and (inactive != 1 or inactive is null)",id), null, null);
+			final Map<String, String> row = SqliteTools.getOne_2(conn, "movie", String.format(" id = %s ",id), null, null);
 			if(row == null || row.size() == 0){
 				return Response.status(404).entity(String.format("找不到id=[%s]的记录", qid)).build();
 			}
@@ -109,6 +109,9 @@ public class FilmEditResource {
 					row.put(key, "");
 				}
 			}
+			final ObjectMapper mapper = new ObjectMapper();
+			final String prettyFeatures = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(mapper.readValue(row.get("features"), Map.class));
+			row.put("features", prettyFeatures);
 			row.put("uuid", MovieUUIDHelper.uuid(id));
 			row.put("type", type);
 			return Response.ok(CommonFMRender.render(row, "list/edit.html")).build();
@@ -117,25 +120,4 @@ public class FilmEditResource {
 		}
 	}
 	
-	
-	
-	static String sqliteFile(final String type){
-		final String sqliteFile;
-		switch(type){
-			case "hk":{
-				sqliteFile = GlobalSetting.getStringByPath("yk_hk_sqlite_file");
-				break;
-			}
-			case "dalu":{
-				sqliteFile = GlobalSetting.getStringByPath("yk_dalu_sqlite_file");
-				break;
-			}
-			case "tw":{
-				sqliteFile = GlobalSetting.getStringByPath("yk_tw_sqlite_file");
-				break;
-			}
-			default: throw new IllegalArgumentException();
-		}
-		return sqliteFile;
-	}
 }
