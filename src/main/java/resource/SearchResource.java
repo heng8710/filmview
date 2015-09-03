@@ -15,7 +15,6 @@ import javax.ws.rs.core.Response;
 
 import jersey.repackaged.com.google.common.collect.Lists;
 import jersey.repackaged.com.google.common.collect.Maps;
-import list.ListFilm;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.cjk.CJKAnalyzer;
@@ -28,6 +27,7 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.SimpleFSDirectory;
 
+import render.ListFilm;
 import sqlitetools.SqliteTools;
 import tools.SqliteHelper;
 import uuid.MovieUUIDHelper;
@@ -47,7 +47,6 @@ public class SearchResource {
 	static final int NumberPerPage = 30;
 	static final int MaxNumber = 1024*1024;
 	
-//	final static String[] searchTypes = new String[]{"hk", "dalu", "tw"};
 	final static String[] searchTypes = new String[]{"hk", "dalu", "tw", "hanguo", "tai", "usa", "uk", "fr"}; 
 	
 	@GET
