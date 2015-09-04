@@ -20,6 +20,7 @@ public class TypeHelper {
 		case "hanguo": return "韩国";
 		case "fr": return "法国";
 		case "tai": return "泰国";
+		case "uk": return "英国";
 		case "usa": return "美国";
 		default: return rawType;
 	}
