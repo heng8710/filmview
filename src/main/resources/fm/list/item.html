@@ -116,7 +116,14 @@
 				<button id="fat-btn" class="btn btn-primary" data-loading-text="Loading..." onclick="history.back();" type="button" style="margin-top: 20px"> 
 					<span class="glyphicon glyphicon-chevron-left"></span>返回
 				</button>
-				
+				 <!-- 返回分类列表 -->
+				<a href="/movie/list/yk/${type}" title="返回分类列表：${type}">
+				  	  <!-- <button type="button" class="btn btn-default btn-lg" > -->
+				  	  <span class="label label-warning">
+					  	<span class="glyphicon glyphicon-home" style="margin-top:16px;margin-left:3px;"></span>&nbsp;&nbsp;
+				      <!-- </button> -->
+				      </span>
+				</a>
 				
 				<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
 				<a href="/movie/edit/youku_play_url/${type}?uuid=${uuid}">修正</a>
