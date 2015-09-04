@@ -47,7 +47,7 @@ public class SearchResource {
 	static final int NumberPerPage = 30;
 	static final int MaxNumber = 1024*1024;
 	
-	final static String[] searchTypes = new String[]{"hk", "dalu", "tw", "hanguo", "tai", "usa", "uk", "fr"}; 
+	public final static String[] searchTypes = new String[]{"hk", "dalu", "tw", "hanguo", "tai", "usa", "uk", "fr"}; 
 	
 	@GET
 	@Path("/{text}/{pageNum}")

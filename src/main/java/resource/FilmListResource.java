@@ -3,6 +3,7 @@ package resource;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -80,7 +81,9 @@ public class FilmListResource {
 	
 	@GET
 	public Response yk( ) throws Exception{
-		return Response.seeOther(URI.create("list/yk/hk")).build();
+		final String[] types = new String[]{"hk", "dalu", "tw", "hanguo", "tai", "usa", "uk", "fr"}; 
+		final String type = types[new Random().nextInt(types.length -1)];
+		return Response.seeOther(URI.create("list/yk/"+type)).build();
 	}
 	
 	
