@@ -1,4 +1,4 @@
-package resource;
+package movieresource;
 
 import java.net.URL;
 import java.net.URLDecoder;

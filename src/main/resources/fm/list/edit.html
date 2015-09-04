@@ -79,7 +79,7 @@
 <div class="container-fluid">
   <div class="navbar-header">
    <!-- 返回首页 -->
-   <a href="/movie/list">
+   <a href="/">
   	  <!-- <button type="button" class="btn btn-default btn-lg" > -->
   	  <span class="label label-warning">
 	  	<span class="glyphicon glyphicon-home" style="margin-top:16px;margin-left:3px;"></span>&nbsp;
@@ -93,8 +93,8 @@
    -->
       
          <div class="visible-xs-inline">
-	      	 <input id='searchArea2' name="keyword" type="text" class="" placeholder="片名, 演员" style="margin-top:12px;margin-left:8px;width:125px">
-		     <button class="btn btn-default" type="submit" onclick="searchFun2()" style="margin-left:8px;width:55px">搜寻</button>
+	      	 <input id='searchArea2' name="keyword" type="text" class="" placeholder="片名, 演员" style="margin-bottom:4px;margin-left:8px;width:125px">
+		     <button class="btn btn-default" type="submit" onclick="searchFun2()" style="margin-left:8px;margin-top:3px;width:55px">搜寻</button>
 	      <div class="btn-group pull-right visible-xs-inline" role="group" style="margin-top:8px;margin-right:8px;">
 		      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 		        <span class="glyphicon glyphicon-globe"></span>
@@ -153,15 +153,23 @@
 		</div>   
 		  
   <div id="navbar" class="collapse navbar-collapse">
-    <form class="navbar-form navbar-left fullsearch-form" action="#" style="width:200px">
+    <form class="navbar-form navbar-left fullsearch-form" action="#" ><!-- style="width:200px" -->
       <div class="input-group">
-        <input id='searchArea' name="keyword" type="text" class="form-control" placeholder="片名, 演员" style="width:155px">
+        <input id='searchArea' name="keyword" type="text" class="form-control" placeholder="片名, 演员" style="margin-right:5px;width:155px"><!-- margin-bottom:16px; -->
         <span class="input-group-btn">
-          <button class="btn btn-default" type="submit" onclick="searchFun()" style="width:55px">搜寻</button>
+          <button class="btn btn-default" type="submit" onclick="searchFun()" style="width:55px">搜寻</button><!-- margin-bottom:16px; -->
         </span>
       </div>
     </form>
-    
+	 <ul class="nav navbar-nav">
+        <li><a href="/movie/search/周星驰/1">周星驰 </a></li>
+  		<li><a href="/movie/search/李连杰/1">李连杰 </a></li>
+        <li><a href="/movie/search/成龙/1">成龙 </a></li>
+        <li><a href="/movie/search/林正英/1">林正英 </a></li>
+        <li><a href="/movie/search/007/1">徐克</a></li>
+        <li><a href="/movie/search/007/1">007</a></li>
+        <li><a href="/movie/search/007/1">托尼·贾</a></li>
+    </ul>
     
      <ul class="nav navbar-nav navbar-right">
       <li class="dropdown">

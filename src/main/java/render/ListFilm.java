@@ -20,7 +20,7 @@ import freemarker.template.TemplateExceptionHandler;
 public class ListFilm {
 
 	
-	public static byte[] render(final List<Map<String, Object>> movies, final String title, final Integer pageNum, final int maxPage/*必须大于10*/, final String pagingUrlFormatter) throws Exception{
+	public static byte[] render(final List<Map<String, Object>> movies, final String title, final int pageNum, final int maxPage/*必须大于10*/, final String pagingUrlFormatter) throws Exception{
 		final Configuration cfg = new Configuration(Configuration.VERSION_2_3_22);
 		cfg.setDirectoryForTemplateLoading(new File((String)GlobalSetting.getByPath("freemarker_dir")));
 		cfg.setDefaultEncoding("UTF-8");

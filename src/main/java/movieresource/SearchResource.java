@@ -1,6 +1,7 @@
-package resource;
+package movieresource;
 
 import java.io.File;
+import java.net.URI;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.util.List;
@@ -50,9 +51,17 @@ public class SearchResource {
 	public final static String[] searchTypes = new String[]{"hk", "dalu", "tw", "hanguo", "tai", "usa", "uk", "fr"}; 
 	
 	@GET
+	@Path("/{text}")
+	@Produces("text/html")
+	public Response get2(@PathParam("text") final String text, @PathParam("pageNum") final int pageNum) throws Exception{
+		return Response.seeOther(URI.create("search/"+text+"/1")).build();
+	}
+	
+	
+	@GET
 	@Path("/{text}/{pageNum}")
 	@Produces("text/html")
-	public Response coverimg(@PathParam("text") final String text, @PathParam("pageNum") final int pageNum) throws Exception{
+	public Response get0(@PathParam("text") final String text, @PathParam("pageNum") final int pageNum) throws Exception{
 		//TODO 限制text
 		final List<Map<String, Object>> li = Lists.newArrayList();
 		int hits = 0;
@@ -93,7 +102,7 @@ public class SearchResource {
 			final String url = String.format(playUrlFormatter, MovieUUIDHelper.uuid(Long.valueOf(movieId)));
 			i.put("url", url);
 			i.put("title", row.get("movie_name"));
-			final String proxyImgUrl = String.format(coverimgUrlFormatter, MovieUUIDHelper.uuid(Long.valueOf(id)));
+			final String proxyImgUrl = String.format(coverimgUrlFormatter, MovieUUIDHelper.uuid(Long.valueOf(/*id*/movieId)));
 			i.put("img", proxyImgUrl);
 			i.put("time", "");
 			i.put("info", row.get("actors"));

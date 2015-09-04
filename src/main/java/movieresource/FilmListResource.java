@@ -1,4 +1,4 @@
-package resource;
+package movieresource;
 
 import java.net.URI;
 import java.util.List;
@@ -83,7 +83,7 @@ public class FilmListResource {
 	public Response yk( ) throws Exception{
 		final String[] types = new String[]{"hk", "dalu", "tw", "hanguo", "tai", "usa", "uk", "fr"}; 
 		final String type = types[new Random().nextInt(types.length -1)];
-		return Response.seeOther(URI.create("list/yk/"+type)).build();
+		return Response.seeOther(URI.create("list/yk/"+"hk"/*type*/)).build();
 	}
 	
 	

@@ -4,18 +4,16 @@ import javax.ws.rs.ApplicationPath;
 
 import org.glassfish.jersey.server.ResourceConfig;
 
-import filter.SearchRequestFilter;
 
-
-@ApplicationPath("movie")
-public class MyApplication extends ResourceConfig {
-    public MyApplication() {
-        packages("resource");
-        register(SearchRequestFilter.class);
-        
-        //referer filter
-        
-        //cache headers
-        
-    }
+//@ApplicationPath("")
+public class MyApplication  extends ResourceConfig{
+	
+	 public MyApplication() {
+	        packages("resource");
+	        
+	        //referer filter
+	        
+	        //cache headers
+	        
+	    }
 }

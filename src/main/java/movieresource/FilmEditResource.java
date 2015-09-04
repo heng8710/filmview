@@ -1,4 +1,4 @@
-package resource;
+package movieresource;
 
 import java.net.URI;
 import java.nio.charset.Charset;
