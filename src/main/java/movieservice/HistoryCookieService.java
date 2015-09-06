@@ -59,7 +59,7 @@ public class HistoryCookieService {
 	final static int MAX_HISTORY_NUMBER = 10;
 	
 	
-	public static String getCookie(final HttpServletRequest request){
+	public synchronized static String getCookie(final HttpServletRequest request){
 		final String cookieKey = cookieKey(request);
 		final Connection conn = conn();
 		try{
@@ -84,7 +84,7 @@ public class HistoryCookieService {
 	 * @return
 	 * @throws Exception
 	 */
-	public static List<Map<String, String>> getCookie_2(final HttpServletRequest request){
+	public synchronized static List<Map<String, String>> getCookie_2(final HttpServletRequest request){
 		try {
 			final String rawStr = getCookie(request);
 			if(Strings.isNullOrEmpty(rawStr)){
@@ -101,7 +101,7 @@ public class HistoryCookieService {
 	
 	
 	
-	public static List<Map<String, String>> getCookie_2_2(final HttpServletRequest request){
+	public synchronized static List<Map<String, String>> getCookie_2_2(final HttpServletRequest request){
 		final List<Map<String, String>> raw = getCookie_2(request);
 		final List<Map<String, String>> r = Lists.newArrayListWithExpectedSize(raw.size());
 		raw.forEach(map->{
@@ -112,7 +112,7 @@ public class HistoryCookieService {
 		return r;
 	}
 	
-	public static String updateCookie(final HttpServletRequest request, final String url, final String title){
+	public synchronized static String updateCookie(final HttpServletRequest request, final String url, final String title){
 		final String cookieKey = cookieKey(request);
 		final Connection conn = conn();
 		try{
