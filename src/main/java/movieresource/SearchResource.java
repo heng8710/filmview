@@ -8,14 +8,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
 import jersey.repackaged.com.google.common.collect.Lists;
 import jersey.repackaged.com.google.common.collect.Maps;
+import movieservice.HistoryCookieService;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.cjk.CJKAnalyzer;
@@ -61,7 +64,7 @@ public class SearchResource {
 	@GET
 	@Path("/{text}/{pageNum}")
 	@Produces("text/html")
-	public Response get0(@PathParam("text") final String text, @PathParam("pageNum") final int pageNum) throws Exception{
+	public Response get0(@PathParam("text") final String text, @PathParam("pageNum") final int pageNum, @Context final HttpServletRequest request) throws Exception{
 		//TODO 限制text
 		final List<Map<String, Object>> li = Lists.newArrayList();
 		int hits = 0;
@@ -73,7 +76,8 @@ public class SearchResource {
 //		hits = Math.max(hits, addSearch(li, "/movie/play/yk/dalu/%s", "/movie/coverimg/yk/dalu/%s", GlobalSetting.getStringByPath("yk_dalu_sqlite_file"), GlobalSetting.getStringByPath("dalupinglun_luncene_index_folder"), text, pageNum));
 //		hits = Math.max(hits, addSearch(li, "/movie/play/yk/tw/%s", "/movie/coverimg/yk/tw/%s", GlobalSetting.getStringByPath("yk_tw_sqlite_file"), GlobalSetting.getStringByPath("twpinglun_luncene_index_folder"), text, pageNum));
 //		hits = Math.max(hits, addSearch(li, "/movie/play/yk/hanguo/%s", "/movie/coverimg/yk/hanguo/%s", GlobalSetting.getStringByPath("yk_hanguo_sqlite_file"), GlobalSetting.getStringByPath("hanguopinglun_luncene_index_folder"), text, pageNum));
-		final byte[] bs = ListFilm.render(li, "搜索:"+ text, pageNum, (int)Math.ceil((double)hits/NumberPerPage) , "/movie/search/"+ text + "/%s"); 
+		final List<Map<String,String>> historyCookieVal = HistoryCookieService.getCookie_2_2(request);
+		final byte[] bs = ListFilm.render(li, "搜索:"+ text, pageNum, (int)Math.ceil((double)hits/NumberPerPage) , "/movie/search/"+ text + "/%s", historyCookieVal);
 		return Response.ok(bs).build();
 	}
 	

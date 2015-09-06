@@ -15,11 +15,14 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
+import movieservice.HistoryCookieService;
 import jersey.repackaged.com.google.common.base.Joiner;
 import jersey.repackaged.com.google.common.collect.Lists;
 import jersey.repackaged.com.google.common.collect.Maps;
@@ -53,7 +56,7 @@ public class RandomRecommendResource {
 	
 	@GET
 	@Produces("text/html")
-	public Response yk( ) throws Exception{
+	public Response yk(@Context final HttpServletRequest request ) throws Exception{
 		final LinkedHashMap<String, String> randomTypeMap = new PeriodRandomItem(System.currentTimeMillis()).randomTypeMap;//getRandom();
 		final List<Map<String, Object>> all = Lists.newArrayList();
 		for(final Entry<String, String> entry: randomTypeMap.entrySet()){
@@ -84,8 +87,8 @@ public class RandomRecommendResource {
 				logger.log(Level.SEVERE, String.format("获取随机资源资源，查询type=[%s]时出错", entry.getKey()), e);
 			}
 		}
-		
-		final byte[] bs = ListFilm.render( all, "随机推荐电影", 1, 1 , "/movie/recommend/random"); 
+		final List<Map<String,String>> historyCookieVal = HistoryCookieService.getCookie_2_2(request);
+		final byte[] bs = ListFilm.render( all, "随机推荐电影", 1, 1 , "/movie/recommend/random", historyCookieVal); 
 		return Response.ok(bs).build();
 	}
 	

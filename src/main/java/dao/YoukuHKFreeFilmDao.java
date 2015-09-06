@@ -70,7 +70,7 @@ public class YoukuHKFreeFilmDao {
 				final String id = row.get("id");
 				String url = String.format(moviePlayUrlFormatter, MovieUUIDHelper.uuid(Long.valueOf(id)));//(String)features.get("direct");
 				final String title = row.get("movie_name");
-				final String coverImg = row.get("img_url");
+//				final String coverImg = row.get("img_url");
 				final String movieTime = "";
 				final String info = row.get("actors");
 				

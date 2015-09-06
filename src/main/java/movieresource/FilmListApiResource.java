@@ -17,6 +17,7 @@ import javax.ws.rs.core.Response;
 import jersey.repackaged.com.google.common.base.Joiner;
 import jersey.repackaged.com.google.common.collect.Maps;
 import jersey.repackaged.com.google.common.collect.Sets;
+import movieservice.FilmListService;
 
 import org.apache.commons.lang3.Range;
 
@@ -53,14 +54,16 @@ public class FilmListApiResource {
 		if(pageNum < 1){
 			return Response.seeOther(URI.create(String.format("list/yk/%s/%s", type, 1))).build();
 		}
-		final List<Map<String, Object>> li = YoukuHKFreeFilmDao.getBy(String.format(" page_num = %s and (inactive != 1 or inactive is null)",pageNum), " order by weight desc, id asc ",  sqliteFilePath, "/movie/play/yk/"+type+"/%s",  "/movie/coverimg/yk/"+type+"/%s");
+//		final List<Map<String, Object>> li = YoukuHKFreeFilmDao.getBy(String.format(" page_num = %s and (inactive != 1 or inactive is null)",pageNum), " order by weight desc, id asc ",  sqliteFilePath, "/movie/play/yk/"+type+"/%s",  "/movie/coverimg/yk/"+type+"/%s");
 //		final byte[] bs = ListFilm.render(li, TypeHelper.typeAlias(type)+"电影", pageNum, maxPageNum/*这个是要改的，要看对方的资源是否是变化 了*/, "/movie/list/yk/"+type+"/%s");
-		final Map<String, Object> r = Maps.newHashMap();
-		r.put("movies", li);
-		r.put("type", type);
-		r.put("type_alias", TypeHelper.typeAlias(type) + "电影");
-		r.put("num", li.size());
-		r.put("page_num", pageNum);
+//		final Map<String, Object> r = Maps.newHashMap();
+//		r.put("movies", li);
+//		r.put("type", type);
+//		r.put("type_alias", TypeHelper.typeAlias(type) + "电影");
+//		r.put("num", li.size());
+//		r.put("page_num", pageNum);
+//		r.put("max_page_num", maxPageNum);
+		final Map<String, Object> r = FilmListService.doGetByTypeAndPageNum(type, pageNum, sqliteFilePath);
 		r.put("max_page_num", maxPageNum);
 		return Response.ok(new ObjectMapper().writeValueAsBytes(r)).build();
 	}
@@ -102,26 +105,27 @@ public class FilmListApiResource {
 	 * @throws Exception
 	 */
 	static Response doGetByIds(final String type, final Set<String> ids) throws Exception{
-		if(ids.size() == 0){
-			return Response.ok().build();
-		}
-		final String sqliteFilePath = SqliteHelper.getTargetSqliteFile("yk_sqlite_folder", type);
-		final Set<Integer> underIds = Sets.newHashSet(); 
-		ids.forEach(s->{
-			if(s.indexOf('-') == -1){
-				underIds.add(Integer.valueOf(s));
-			}else{
-				//必须是这种格式【22-998】
-				final Iterator<String> it = Splitter.on('-').omitEmptyStrings().trimResults().split(s).iterator();
-				//用range的好处是上下届颠倒了，也会自动修正。
-				final Range<Integer> r = Range.between(Integer.valueOf(it.next()), Integer.valueOf(it.next()));
-				for(int i=r.getMinimum(); i< r.getMaximum(); i++){
-					underIds.add(i);
-				}
-			}
-		});
-		final String idsStr = Joiner.on(',').join(underIds);
-		final List<Map<String, Object>> li = YoukuHKFreeFilmDao.getBy(String.format(" id in (%s) and (inactive != 1 or inactive is null)",idsStr), null,  sqliteFilePath, "/movie/play/yk/"+type+"/%s",  "/movie/coverimg/yk/"+type+"/%s");
+//		if(ids.size() == 0){
+//			return Response.ok().build();
+//		}
+//		final String sqliteFilePath = SqliteHelper.getTargetSqliteFile("yk_sqlite_folder", type);
+//		final Set<Integer> underIds = Sets.newHashSet(); 
+//		ids.forEach(s->{
+//			if(s.indexOf('-') == -1){
+//				underIds.add(Integer.valueOf(s));
+//			}else{
+//				//必须是这种格式【22-998】
+//				final Iterator<String> it = Splitter.on('-').omitEmptyStrings().trimResults().split(s).iterator();
+//				//用range的好处是上下届颠倒了，也会自动修正。
+//				final Range<Integer> r = Range.between(Integer.valueOf(it.next()), Integer.valueOf(it.next()));
+//				for(int i=r.getMinimum(); i< r.getMaximum(); i++){
+//					underIds.add(i);
+//				}
+//			}
+//		});
+//		final String idsStr = Joiner.on(',').join(underIds);
+//		final List<Map<String, Object>> li = YoukuHKFreeFilmDao.getBy(String.format(" id in (%s) and (inactive != 1 or inactive is null)",idsStr), null,  sqliteFilePath, "/movie/play/yk/"+type+"/%s",  "/movie/coverimg/yk/"+type+"/%s");
+		final List<Map<String, Object>> li = FilmListService.doGetByIds(type, ids);
 		final Map<String, Object> r = Maps.newHashMap();
 		r.put("movies", li);
 		r.put("type", type);

@@ -4,6 +4,7 @@ import javax.ws.rs.ApplicationPath;
 
 import org.glassfish.jersey.server.ResourceConfig;
 
+import filter.HistoryCookieFilter;
 import filter.SearchRequestFilter;
 
 
@@ -12,6 +13,7 @@ public class MovieApplication extends ResourceConfig {
     public MovieApplication() {
         packages("movieresource");
         register(SearchRequestFilter.class);
+//        register(HistoryCookieFilter.class);
         
         //referer filter
         

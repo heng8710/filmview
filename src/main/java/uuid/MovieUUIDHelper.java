@@ -1,7 +1,10 @@
 package uuid;
 
-import conf.GlobalSetting;
+import java.util.List;
+import java.util.Map;
+
 import sqlitetools.idmapper.UUIDMapper;
+import conf.GlobalSetting;
 
 public final class MovieUUIDHelper {
 
@@ -26,6 +29,12 @@ public final class MovieUUIDHelper {
 		uuidMapper.gen(start, end);
 	}
 	
+	public static Map<String, String> uuids(final List<Long> ids){
+		return uuidMapper.uuids(ids);
+	}
 	
 	
+	public static Map<String, String> uuids_2(final List<String> ids){
+		return uuidMapper.uuids_2(ids);
+	}
 }

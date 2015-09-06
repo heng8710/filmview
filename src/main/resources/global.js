@@ -32,6 +32,8 @@
 //	},
 	
 	
+	history_cookie_sqlite_file: "f:/sqlite/history_cookie.sqlite",
+	
 	lucene_index_root_folder_for_youku: "F:/lunene_index",
 	
 //	hkpinglun_luncene_index_folder: "F:/lunene_index/01",

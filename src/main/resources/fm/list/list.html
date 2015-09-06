@@ -166,11 +166,30 @@
   		<li><a href="/movie/search/李连杰/1">李连杰 </a></li>
         <li><a href="/movie/search/成龙/1">成龙 </a></li>
         <li><a href="/movie/search/林正英/1">林正英 </a></li>
-        <li><a href="/movie/search/007/1">徐克</a></li>
-        <li><a href="/movie/search/007/1">007</a></li>
     </ul>
     
     
+    
+     <ul class="nav navbar-nav">
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+          <span class="glyphicon glyphicon-globe" style="font-size:12px;"></span>
+         <!--  <span class="hidden-sm">港片</span> -->
+         	观看历史
+          <span class="caret"></span>
+        </a>
+         <ul class="dropdown-menu" role="menu">
+         <#list historys as history>
+	          <li>
+	            <a href="${history.url}">${history.title}</a>
+	          </li>
+	          <li>
+	            -
+	          </li>
+          </#list>
+         </ul>
+       </li>
+     </ul>
     
      <ul class="nav navbar-nav navbar-right">
       <li class="dropdown">

@@ -31,6 +31,7 @@
 //		yk_hanguo: "F:/film/coverimg/youku/hanguo/20150902070449",
 //	},
 	
+	history_cookie_sqlite_file: "/data/movie/history_cookie.sqlite",
 	
 	lucene_index_root_folder_for_youku: "/data/movie/lucene_index",
 	
