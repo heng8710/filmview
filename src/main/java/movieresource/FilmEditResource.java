@@ -3,9 +3,11 @@ package movieresource;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.sql.Connection;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -13,9 +15,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
 import jersey.repackaged.com.google.common.collect.Maps;
+import movieservice.HistoryCookieService;
 import my.http.MyHttpGet;
 
 import org.jsoup.Jsoup;
@@ -90,7 +94,9 @@ public class FilmEditResource {
 	@GET
 	@Path("youku_play_url/{type}")
 	@Produces("text/html")
-	public Response get(@PathParam("type") final String type, @QueryParam("id") final String qid, @QueryParam("uuid") final String quuid) throws Exception{
+	public Response get(@PathParam("type") final String type, @QueryParam("id") final String qid, @QueryParam("uuid") final String quuid
+			,@Context final HttpServletRequest request
+			) throws Exception{
 		//检查
 		final String sqliteFile = SqliteHelper.getTargetSqliteFile("yk_sqlite_folder", type);
 		final Long id = Strings.isNullOrEmpty(qid)? MovieUUIDHelper.id(quuid): Long.valueOf(qid);
@@ -98,22 +104,24 @@ public class FilmEditResource {
 			return Response.status(404).entity(String.format("uuid=[%s], id=[%s]，都不正确", quuid, qid)).build();
 		}
 		try(final Connection conn = SqliteTools.conn(sqliteFile)){
-			final Map<String, String> row = SqliteTools.getOne_2(conn, "movie", String.format(" id = %s ",id), null, null);
+			final Map<String, Object> row = SqliteTools.getOne_2_2(conn, "movie", String.format(" id = %s ",id), null, null);
 			if(row == null || row.size() == 0){
 				return Response.status(404).entity(String.format("找不到id=[%s]的记录", qid)).build();
 			}
-			for(final Entry<String,String> entry: row.entrySet()){
+			for(final Entry<String,Object> entry: row.entrySet()){
 				final String key = entry.getKey();
-				final String val = entry.getValue();
+				final Object val = entry.getValue();
 				if(val == null){
 					row.put(key, "");
 				}
 			}
 			final ObjectMapper mapper = new ObjectMapper();
-			final String prettyFeatures = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(mapper.readValue(row.get("features"), Map.class));
+			final String prettyFeatures = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(mapper.readValue((String)row.get("features"), Map.class));
 			row.put("features", prettyFeatures);
 			row.put("uuid", MovieUUIDHelper.uuid(id));
 			row.put("type", type);
+			final List<Map<String,String>> historyCookieVal = HistoryCookieService.getCookie_2_2(request);
+			row.put("historys", historyCookieVal);
 			return Response.ok(CommonFMRender.render(row, "list/edit.html")).build();
 		}catch (final Exception e) {
 			return Response.serverError().entity(e).build();
